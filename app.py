@@ -17,7 +17,8 @@ TEST_DESCRIPTIONS = {
     "Check add transaction page": ["Verify that add transaction page is not accessible without login.", eighth_test],
     "Check transaction view page": ["Verify that transaction view page is not accessible without login.", ninth_test],
     "Check that logged in user can logout": ["Verify that logged in user can logout.", tenth_test],
-    "Check transaction add page": ["Verify that transaction add page can be accessed by logged in users.", eleventh_test]
+    "Check transaction add page": ["Verify that transaction add page can be accessed by logged in users.", eleventh_test],
+    "Check if transaction title is correctly displayed.": ["Verify that transaction title is correctly displayed.", twelveth_test]
 }
 
 @st.cache_resource
@@ -76,10 +77,10 @@ if all_tests:
     "Check login without username": "Test Passed" if outputs[4] else "Test Failed",
     "Check login without password": "Test Passed" if outputs[5] else "Test Failed",
     "Check functionality of Get Started button": "Test Passed" if outputs[6] else "Test Failed",
-    "Check developers page": "Test Passed" if outputs[7] else "Test Failed",
-    "Check projects page": "Test Passed" if outputs[8] else "Test Failed",
-    "Check recommendations page": "Test Passed" if outputs[9] else "Test Failed",
-    "Check inbox page": "Test Passed" if outputs[10] else "Test Failed"
+    "Check add transaction page": "Test Passed" if outputs[7] else "Test Failed",
+    "Check transaction view page": "Test Passed" if outputs[8] else "Test Failed",
+    "Check that logged in user can logout": "Test Passed" if outputs[9] else "Test Failed",
+    "Check transaction add page": "Test Passed" if outputs[10] else "Test Failed"
     }
 
     df = pd.DataFrame()

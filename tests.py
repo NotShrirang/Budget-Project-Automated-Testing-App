@@ -1,10 +1,12 @@
+from colorama import Fore, Back, Style
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from colorama import Fore, Back, Style
-from dotenv import load_dotenv
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 import os
+import time
+from dotenv import load_dotenv
 load_dotenv()
 
 BASEURL = "http://localhost:5173"
@@ -84,10 +86,6 @@ def fourth_test(driver):
         WebDriverWait(driver, 20).until(EC.url_to_be(expected_url))
         if driver.current_url == expected_url:
             print(Fore.GREEN + "Test passed" + Style.RESET_ALL)
-            sign_out_button = driver.find_element(By.XPATH, "/html/body/div/div/div[1]/div[1]/div/div[2]/div")
-            sign_out_button.click()
-            yes_button = driver.find_element(By.XPATH, "/html/body/div[2]/div/div[6]/button[1]")
-            yes_button.click()
             return True
         else:
             print(Fore.RED + "Test failed" + Style.RESET_ALL)
@@ -216,6 +214,7 @@ def tenth_test(driver):
     Verify that logged in user can logout.
     '''
     if fourth_test(driver):
+        time.sleep(2)
         sign_out_button = driver.find_element(By.XPATH, "/html/body/div/div/div[1]/div[1]/div/div[2]/div")
         sign_out_button.click()
         yes_button = driver.find_element(By.XPATH, "/html/body/div[2]/div/div[6]/button[1]")
@@ -240,7 +239,6 @@ def eleventh_test(driver):
     '''
     Verify that only logged in user can add transaction.
     '''
-    print("expected_url")
     if fourth_test(driver):
         add_button = driver.find_element(By.XPATH, "/html/body/div/div/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[2]")
         add_button.click()
@@ -248,6 +246,32 @@ def eleventh_test(driver):
         try:
             WebDriverWait(driver, 20).until(EC.url_to_be(expected_url))
             if driver.current_url == expected_url:
+                print(Fore.GREEN + "Test passed" + Style.RESET_ALL)
+                return True
+            else:
+                print(Fore.RED + "Test failed" + Style.RESET_ALL)
+                return False
+        except Exception as e:
+            print(Fore.RED + f"Test failed because of unexpected result" + Style.RESET_ALL)
+            return False
+    else:
+        print(Fore.RED + f"Test failed because of wrong login credentials" + Style.RESET_ALL)
+        return False
+
+def twelveth_test(driver):
+    '''
+    Verify that transaction title is correctly displayed.
+    '''
+    if fourth_test(driver):
+        datagrid_title_element = driver.find_element(By.XPATH, "/html/body/div/div/div[1]/div[2]/div[2]/div/div[1]/div[3]/div/div/div[1]/div[2]/div/div/div[1]/div[2]/div")
+        datagrid_title = datagrid_title_element.text
+        datagrid_row = driver.find_element(By.XPATH, "/html/body/div/div/div[1]/div[2]/div[2]/div/div[1]/div[3]/div/div/div[1]/div[2]/div/div/div[1]")
+        actionChains = ActionChains(driver)
+        actionChains.double_click(datagrid_row).perform()
+        transaction_title_element = driver.find_element(By.XPATH, "/html/body/div/div/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[1]/div[1]")
+        transaction_title = transaction_title_element.text
+        try:
+            if datagrid_title == transaction_title:
                 print(Fore.GREEN + "Test passed" + Style.RESET_ALL)
                 return True
             else:
@@ -273,4 +297,5 @@ if __name__ == "__main__":
     ninth_test(driver)
     tenth_test(driver)
     eleventh_test(driver)
+    twelveth_test(driver)
     driver.quit()
